@@ -23,20 +23,24 @@ const messagesDiv = document.getElementById("messages");
 sendBtn.addEventListener("click", function() {
     const message = messageInput.value.trim();
     if (message) {
-        // Mesajı Firebase'e gönder
+        // Mesajı Firebase Realtime Database'e gönder
         database.ref('messages').push({
             text: message,
             timestamp: Date.now()
         });
-        messageInput.value = '';  // Mesaj kutusunu temizle
+
+        // Mesaj kutusunu temizle
+        messageInput.value = '';
     }
 });
 
-// Firebase veritabanından mesajları dinle ve ekle
+// Firebase veritabanından mesajları dinle ve göster
 database.ref('messages').on('child_added', function(snapshot) {
     const messageData = snapshot.val();
     const messageElement = document.createElement("div");
     messageElement.textContent = messageData.text;
     messagesDiv.appendChild(messageElement);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight; // En son mesaja kaydır
+
+    // En son mesaja kaydır
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
